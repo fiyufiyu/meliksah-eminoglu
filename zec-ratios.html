@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>ZEC Ratio View • Binance</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg: #050816;
+      --card: #0b1020;
+      --accent: #00e0b8;
+      --accent-red: #ff4b6a;
+      --accent-green: #22c55e;
+      --text: #f9fafb;
+      --text-soft: #9ca3af;
+      --border-subtle: #1f2933;
+      --radius-xl: 22px;
+      --shadow-soft: 0 18px 45px rgba(0, 0, 0, 0.7);
+      --transition: 200ms ease-out;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", Roboto, sans-serif;
+      background: radial-gradient(circle at top, #141b3b 0, #050816 40%, #02030a 100%);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 1120px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: flex-end;
+    }
+
+    h1 {
+      font-size: clamp(1.6rem, 2.4vw, 2rem);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
+    .subtitle {
+      font-size: 0.9rem;
+      color: var(--text-soft);
+      margin-top: 4px;
+    }
+
+    .badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 6px;
+    }
+
+    .badge {
+      font-size: 0.75rem;
+      padding: 3px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      background: rgba(15, 23, 42, 0.92);
+      color: var(--text-soft);
+    }
+
+    .meta {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 4px;
+      font-size: 0.8rem;
+      color: var(--text-soft);
+    }
+
+    main {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.1fr);
+      gap: 18px;
+    }
+
+    @media (max-width: 880px) {
+      main { grid-template-columns: minmax(0, 1fr); }
+    }
+
+    .card {
+      background: radial-gradient(circle at top left, #161b3b 0, #080c19 40%, #050816 100%);
+      border-radius: var(--radius-xl);
+      border: 1px solid rgba(148, 163, 184, 0.22);
+      box-shadow: var(--shadow-soft);
+      padding: 18px 18px 14px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      background: radial-gradient(circle at top right, rgba(0, 224, 184, 0.12), transparent 60%);
+      opacity: 0.6;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .card-title {
+      font-size: 0.92rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--text-soft);
+    }
+
+    .status-pill {
+      font-size: 0.78rem;
+      padding: 3px 9px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      background: rgba(15, 23, 42, 0.9);
+      color: var(--text-soft);
+    }
+
+    .status-pill.live {
+      border-color: rgba(0, 224, 184, 0.5);
+      color: var(--accent);
+    }
+
+    .status-pill.error {
+      border-color: rgba(255, 75, 106, 0.6);
+      color: var(--accent-red);
+    }
+
+    .ratios-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 12px;
+      margin-top: 4px;
+    }
+
+    .ratio-chip {
+      padding: 10px 11px;
+      border-radius: 16px;
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid var(--border-subtle);
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      transition: transform var(--transition), border-color var(--transition),
+        box-shadow var(--transition), background var(--transition);
+    }
+
+    .ratio-chip:hover {
+      transform: translateY(-1px);
+      border-color: rgba(0, 224, 184, 0.5);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.7);
+      background: radial-gradient(circle at top left, rgba(0, 224, 184, 0.15), rgba(15, 23, 42, 0.95));
+    }
+
+    .ratio-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--text-soft);
+    }
+
+    .ratio-value {
+      font-size: 1rem;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .ratio-note {
+      font-size: 0.75rem;
+      color: var(--text-soft);
+    }
+
+    .last-updated {
+      font-size: 0.78rem;
+      color: var(--text-soft);
+      margin-top: 10px;
+    }
+
+    .loader {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 0.8rem;
+      color: var(--text-soft);
+    }
+
+    .dot-pulse {
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 8px rgba(0, 224, 184, 0.8);
+      animation: pulse 1s infinite alternate;
+    }
+
+    @keyframes pulse {
+      from { transform: scale(0.8); opacity: 0.35; }
+      to   { transform: scale(1.5); opacity: 1; }
+    }
+
+    .table-wrapper {
+      border-radius: 14px;
+      border: 1px solid rgba(148, 163, 184, 0.18);
+      overflow: hidden;
+      background: rgba(10, 16, 32, 0.95);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.8rem;
+    }
+
+    thead {
+      background: rgba(15, 23, 42, 0.98);
+      color: var(--text-soft);
+    }
+
+    th, td {
+      padding: 7px 8px;
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    th:first-child, td:first-child { text-align: left; }
+
+    tbody tr {
+      border-top: 1px solid rgba(148, 163, 184, 0.16);
+    }
+
+    tbody tr:nth-child(even) {
+      background: rgba(15, 23, 42, 0.92);
+    }
+
+    tbody tr:hover {
+      background: rgba(30, 64, 175, 0.35);
+    }
+
+    .change { font-variant-numeric: tabular-nums; }
+    .change.pos { color: var(--accent-green); }
+    .change.neg { color: var(--accent-red); }
+
+    .muted {
+      color: var(--text-soft);
+      font-size: 0.76rem;
+      margin-top: 8px;
+    }
+
+    .error {
+      margin-top: 8px;
+      font-size: 0.78rem;
+      color: var(--accent-red);
+    }
+
+    /* Metrics card */
+    .metrics-card {
+      margin-top: 4px;
+    }
+
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 16px;
+    }
+
+    @media (max-width: 880px) {
+      .metrics-grid { grid-template-columns: minmax(0, 1fr); }
+    }
+
+    .metric-block {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .metric-title {
+      font-size: 0.86rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--text-soft);
+    }
+
+    .metric-desc {
+      font-size: 0.8rem;
+      color: var(--text-soft);
+    }
+
+    .metric-chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    .metric-chip {
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border-subtle);
+      background: rgba(15, 23, 42, 0.95);
+      font-size: 0.78rem;
+      display: inline-flex;
+      align-items: baseline;
+      gap: 6px;
+    }
+
+    .metric-chip span.label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--text-soft);
+    }
+
+    .metric-chip span.value {
+      font-variant-numeric: tabular-nums;
+      font-weight: 500;
+    }
+
+    .metric-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.8rem;
+      margin-top: 6px;
+    }
+
+    .metric-row span.metric-label {
+      color: var(--text-soft);
+    }
+
+    .metric-row span.metric-value {
+      font-variant-numeric: tabular-nums;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <div>
+        <h1>ZEC Ratio View</h1>
+        <p class="subtitle">
+          1 ZEC priced in BTC, ETH, SOL, DOGE, XRP and USDT using Binance klines,
+          with ratio changes over 30d • 7d • 3d • 24h • 1h • 15m.
+        </p>
+        <div class="badge-row">
+          <span class="badge">Source: Binance /api/v3/klines & /ticker/24hr</span>
+          <span class="badge">Intervals: 1h for 30d • 15m for shorter</span>
+        </div>
+      </div>
+      <div class="meta">
+        <span id="global-status" class="badge">Loading data…</span>
+        <span id="global-updated">Last updated: –</span>
+      </div>
+    </header>
+
+    <main>
+      <!-- Left: ratio chips -->
+      <section class="card">
+        <div class="card-header">
+          <div class="card-title">1 ZEC = ?</div>
+          <div id="chip-status" class="status-pill">
+            <span class="loader"><span class="dot-pulse"></span> Fetching…</span>
+          </div>
+        </div>
+
+        <div id="ratios-grid" class="ratios-grid"></div>
+
+        <p class="last-updated" id="ratios-note">
+          Ratios are computed from the latest 15-minute candles.
+        </p>
+
+        <div id="error-msg" class="error" style="display:none;"></div>
+      </section>
+
+      <!-- Right: table -->
+      <section class="card">
+        <div class="card-header">
+          <div class="card-title">Ratio change over time</div>
+          <div class="status-pill live">Relative performance</div>
+        </div>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Pair</th>
+                <th>1 ZEC =</th>
+                <th>30d</th>
+                <th>7d</th>
+                <th>3d</th>
+                <th>24h</th>
+                <th>1h</th>
+                <th>15m</th>
+              </tr>
+            </thead>
+            <tbody id="table-body"></tbody>
+          </table>
+        </div>
+
+        <p class="muted">
+          Ratio = (ZECUSDT price) ÷ (coinUSDT price). USDT is treated as $1, so 1 ZEC = ZECUSDT.
+          Changes show how that ratio moved over each timeframe; positive values mean ZEC outperformed that coin.
+        </p>
+      </section>
+    </main>
+
+    <!-- Extra metrics: volatility + liquidity -->
+    <section class="card metrics-card">
+      <div class="card-header">
+        <div class="card-title">Market risk & liquidity context</div>
+      </div>
+
+      <div class="metrics-grid">
+        <div class="metric-block">
+          <div class="metric-title">Relative volatility (30d)</div>
+          <p class="metric-desc">
+            This shows how wild ZEC’s price swings are compared to BTC and ETH over the last 30 days (annualized from 1h returns).
+          </p>
+          <div id="vol-metrics"></div>
+        </div>
+
+        <div class="metric-block">
+          <div class="metric-title">Liquidity & volume intensity</div>
+          <p class="metric-desc">
+            This compares ZEC’s 24h traded volume to the majors to show how much liquidity and attention it has right now.
+          </p>
+          <div id="liq-metrics"></div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    // ----- CONFIG (Binance) -----
+    const BINANCE_BASE_URL = 'https://api.binance.com/api/v3';
+    const BASE_SYMBOL = 'ZECUSDT';  // ZEC priced in USDT
+
+    const QUOTES = [
+      { code: 'BTC', label: 'Bitcoin', pair: 'BTCUSDT' },
+      { code: 'ETH', label: 'Ethereum', pair: 'ETHUSDT' },
+      { code: 'SOL', label: 'Solana', pair: 'SOLUSDT' },
+      { code: 'DOGE', label: 'Dogecoin', pair: 'DOGEUSDT' },
+      { code: 'XRP', label: 'XRP', pair: 'XRPUSDT' },
+      { code: 'USDT', label: 'Tether (USDT)', pair: null } // special: price always ~1
+    ];
+
+    // Short timeframes use 15m candles (covers 7d)
+    const OFFSETS_15M = {
+      '7d': 7 * 24 * 4,
+      '3d': 3 * 24 * 4,
+      '24h': 24 * 4,
+      '1h': 4,
+      '15m': 1
+    };
+    const LIMIT_15M = OFFSETS_15M['7d'] + 1;
+
+    // 30d uses 1h candles (covers 30d)
+    const OFFSETS_1H = {
+      '30d': 30 * 24
+    };
+    const LIMIT_1H = OFFSETS_1H['30d'] + 1;
+
+    const TIMEFRAMES = [
+      { key: '30d', label: '30d' },
+      { key: '7d',  label: '7d'  },
+      { key: '3d',  label: '3d'  },
+      { key: '24h', label: '24h' },
+      { key: '1h',  label: '1h'  },
+      { key: '15m', label: '15m' }
+    ];
+
+    // ----- DOM -----
+    const ratiosGridEl   = document.getElementById('ratios-grid');
+    const tableBodyEl    = document.getElementById('table-body');
+    const chipStatusEl   = document.getElementById('chip-status');
+    const globalStatusEl = document.getElementById('global-status');
+    const globalUpdatedEl= document.getElementById('global-updated');
+    const ratiosNoteEl   = document.getElementById('ratios-note');
+    const errorMsgEl     = document.getElementById('error-msg');
+
+    const volMetricsEl   = document.getElementById('vol-metrics');
+    const liqMetricsEl   = document.getElementById('liq-metrics');
+
+    // ----- Helpers -----
+    function formatRatio(r) {
+      if (r == null || Number.isNaN(r)) return '–';
+      if (r >= 1) return r.toFixed(4);
+      if (r >= 0.01) return r.toFixed(6);
+      return r.toFixed(8);
+    }
+
+    function formatChange(pct) {
+      if (pct == null || Number.isNaN(pct)) return '–';
+      const sign = pct > 0 ? '+' : '';
+      return sign + pct.toFixed(2) + '%';
+    }
+
+    function classifyChange(pct) {
+      if (pct == null || Number.isNaN(pct) || pct === 0) return '';
+      return pct > 0 ? 'pos' : 'neg';
+    }
+
+    function formatPct(pct) {
+      if (pct == null || Number.isNaN(pct)) return '–';
+      return pct.toFixed(1) + '%';
+    }
+
+    function formatFactor(x) {
+      if (x == null || Number.isNaN(x)) return '–';
+      return x.toFixed(2) + 'x';
+    }
+
+    function formatUsdShort(n) {
+      if (n == null || Number.isNaN(n)) return '–';
+      if (n >= 1e9) return '$' + (n / 1e9).toFixed(2) + 'B';
+      if (n >= 1e6) return '$' + (n / 1e6).toFixed(2) + 'M';
+      if (n >= 1e3) return '$' + (n / 1e3).toFixed(2) + 'K';
+      return '$' + n.toFixed(2);
+    }
+
+    function getCloseAtOffset(candles, offset) {
+      if (!candles || !candles.length) return null;
+      const idx = candles.length - 1 - offset;
+      if (idx < 0 || idx >= candles.length) return null;
+      return parseFloat(candles[idx][4]); // close price
+    }
+
+    function computeRealizedVolAnnual(series) {
+      // 1h series → log returns → std dev → annualize (24*365)
+      if (!series || series.length < 3) return null;
+      const rets = [];
+      for (let i = 1; i < series.length; i++) {
+        const p0 = parseFloat(series[i - 1][4]);
+        const p1 = parseFloat(series[i][4]);
+        if (p0 > 0 && p1 > 0) {
+          rets.push(Math.log(p1 / p0));
+        }
+      }
+      if (rets.length < 2) return null;
+      const mean = rets.reduce((a, b) => a + b, 0) / rets.length;
+      let varSum = 0;
+      for (const r of rets) {
+        const diff = r - mean;
+        varSum += diff * diff;
+      }
+      const variance = varSum / (rets.length - 1);
+      const stdHourly = Math.sqrt(variance);
+      const stdAnnual = stdHourly * Math.sqrt(24 * 365);
+      return stdAnnual * 100; // %
+    }
+
+    async function fetchKlines(symbol, interval, limit) {
+      const url = `${BINANCE_BASE_URL}/klines?symbol=${symbol}&interval=${interval}&limit=${limit}`;
+      const res = await fetch(url);
+      if (!res.ok) throw new Error(`Binance error for ${symbol} ${interval}: HTTP ${res.status}`);
+      return await res.json();
+    }
+
+    async function fetchAllKlines(symbols, interval, limit) {
+      const arr = await Promise.all(symbols.map(sym => fetchKlines(sym, interval, limit)));
+      const map = {};
+      symbols.forEach((sym, idx) => {
+        map[sym] = arr[idx];
+      });
+      return map;
+    }
+
+    async function fetchTicker(symbol) {
+      const url = `${BINANCE_BASE_URL}/ticker/24hr?symbol=${symbol}`;
+      const res = await fetch(url);
+      if (!res.ok) throw new Error(`Binance ticker error for ${symbol}: HTTP ${res.status}`);
+      return await res.json();
+    }
+
+    async function fetchTickers(symbols) {
+      const arr = await Promise.all(symbols.map(sym => fetchTicker(sym)));
+      const map = {};
+      symbols.forEach((sym, idx) => {
+        map[sym] = arr[idx];
+      });
+      return map;
+    }
+
+    // ----- Rendering -----
+    function renderRatios(rows, timestampMs) {
+      ratiosGridEl.innerHTML = '';
+      rows.forEach(row => {
+        const div = document.createElement('div');
+        div.className = 'ratio-chip';
+        div.innerHTML = `
+          <div class="ratio-label">ZEC / ${row.quote.code}</div>
+          <div class="ratio-value">
+            1 ZEC = <strong>${formatRatio(row.ratioNow)}</strong> ${row.quote.code}
+          </div>
+          <div class="ratio-note">
+            ZECUSDT: $${row.priceZec.toFixed(2)} • ${row.quote.code === 'USDT'
+              ? 'USDT ≈ $1.00'
+              : `${row.quote.code}USDT: $${row.priceQuote.toFixed(2)}`}
+          </div>
+        `;
+        ratiosGridEl.appendChild(div);
+      });
+
+      const d = new Date(timestampMs);
+      ratiosNoteEl.textContent =
+        'Snapshot based on latest Binance 15m candle as of ' +
+        d.toLocaleTimeString(undefined, {
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit'
+        });
+    }
+
+    function renderTable(rows) {
+      tableBodyEl.innerHTML = '';
+      rows.forEach(row => {
+        const tr = document.createElement('tr');
+        const changes = row.changes;
+        tr.innerHTML = `
+          <td>ZEC / ${row.quote.code}</td>
+          <td>${formatRatio(row.ratioNow)}</td>
+          ${TIMEFRAMES.map(tf => {
+            const val = changes[tf.key];
+            const cls = classifyChange(val);
+            return `<td class="change ${cls}">${formatChange(val)}</td>`;
+          }).join('')}
+        `;
+        tableBodyEl.appendChild(tr);
+      });
+    }
+
+    function renderVolMetrics(volStats) {
+      const { zec, btc, eth, ratioZecBtc, ratioZecEth } = volStats;
+      volMetricsEl.innerHTML = `
+        <div class="metric-chip-row">
+          <div class="metric-chip">
+            <span class="label">ZEC</span>
+            <span class="value">${formatPct(zec)}</span>
+          </div>
+          <div class="metric-chip">
+            <span class="label">BTC</span>
+            <span class="value">${formatPct(btc)}</span>
+          </div>
+          <div class="metric-chip">
+            <span class="label">ETH</span>
+            <span class="value">${formatPct(eth)}</span>
+          </div>
+        </div>
+        <div class="metric-row">
+          <span class="metric-label">ZEC volatility vs BTC</span>
+          <span class="metric-value">${formatFactor(ratioZecBtc)}</span>
+        </div>
+        <div class="metric-row">
+          <span class="metric-label">ZEC volatility vs ETH</span>
+          <span class="metric-value">${formatFactor(ratioZecEth)}</span>
+        </div>
+      `;
+    }
+
+    function renderLiqMetrics(liqStats) {
+      const {
+        zecVol, btcVol, ethVol, solVol, dogeVol, xrpVol,
+        ratioVsBtc, ratioVsMajorsAvg
+      } = liqStats;
+
+      liqMetricsEl.innerHTML = `
+        <div class="metric-chip-row">
+          <div class="metric-chip">
+            <span class="label">ZEC 24h vol</span>
+            <span class="value">${formatUsdShort(zecVol)}</span>
+          </div>
+          <div class="metric-chip">
+            <span class="label">BTC 24h vol</span>
+            <span class="value">${formatUsdShort(btcVol)}</span>
+          </div>
+          <div class="metric-chip">
+            <span class="label">ETH 24h vol</span>
+            <span class="value">${formatUsdShort(ethVol)}</span>
+          </div>
+        </div>
+        <div class="metric-chip-row">
+          <div class="metric-chip">
+            <span class="label">SOL 24h vol</span>
+            <span class="value">${formatUsdShort(solVol)}</span>
+          </div>
+          <div class="metric-chip">
+            <span class="label">DOGE 24h vol</span>
+            <span class="value">${formatUsdShort(dogeVol)}</span>
+          </div>
+          <div class="metric-chip">
+            <span class="label">XRP 24h vol</span>
+            <span class="value">${formatUsdShort(xrpVol)}</span>
+          </div>
+        </div>
+        <div class="metric-row">
+          <span class="metric-label">ZEC volume vs BTC volume</span>
+          <span class="metric-value">${formatFactor(ratioVsBtc)}</span>
+        </div>
+        <div class="metric-row">
+          <span class="metric-label">ZEC volume vs majors average</span>
+          <span class="metric-value">${formatFactor(ratioVsMajorsAvg)}</span>
+        </div>
+      `;
+    }
+
+    // ----- Main load -----
+    async function loadData() {
+      try {
+        globalStatusEl.textContent = 'Loading Binance klines…';
+
+        const symbolsToFetch = [BASE_SYMBOL, ...QUOTES.filter(q => q.pair).map(q => q.pair)];
+
+        // 15m & 1h data + 24h tickers
+        const [series15mMap, series1hMap, tickersMap] = await Promise.all([
+          fetchAllKlines(symbolsToFetch, '15m', LIMIT_15M),
+          fetchAllKlines(symbolsToFetch, '1h', LIMIT_1H),
+          fetchTickers(symbolsToFetch)
+        ]);
+
+        const zec15m = series15mMap[BASE_SYMBOL];
+        const zec1h  = series1hMap[BASE_SYMBOL];
+        if (!zec15m || !zec15m.length) throw new Error('No ZECUSDT 15m data.');
+
+        const lastCandle15m = zec15m[zec15m.length - 1];
+        const timestampMs = lastCandle15m[0];
+        const zecNow = parseFloat(lastCandle15m[4]);
+
+        const rows = [];
+
+        QUOTES.forEach(q => {
+          let quote15mSeries = null;
+          let quote1hSeries = null;
+          let quoteNow;
+
+          if (q.code === 'USDT') {
+            quoteNow = 1;
+          } else {
+            quote15mSeries = series15mMap[q.pair];
+            quote1hSeries = series1hMap[q.pair];
+            if (!quote15mSeries || !quote15mSeries.length) return;
+            const lastQuoteCandle = quote15mSeries[quote15mSeries.length - 1];
+            quoteNow = parseFloat(lastQuoteCandle[4]);
+          }
+
+          const ratioNow = q.code === 'USDT' ? zecNow : zecNow / quoteNow;
+          const changes = {};
+
+          TIMEFRAMES.forEach(tf => {
+            if (tf.key === '30d') {
+              const offset = OFFSETS_1H['30d'];
+              const zPast = getCloseAtOffset(zec1h, offset);
+              if (!zPast) { changes[tf.key] = null; return; }
+              let qPast;
+              if (q.code === 'USDT') {
+                qPast = 1;
+              } else {
+                qPast = getCloseAtOffset(quote1hSeries, offset);
+                if (!qPast) { changes[tf.key] = null; return; }
+              }
+              const ratioPast = q.code === 'USDT' ? zPast : zPast / qPast;
+              changes[tf.key] = (ratioNow / ratioPast - 1) * 100;
+            } else {
+              const offset = OFFSETS_15M[tf.key];
+              const zPast = getCloseAtOffset(zec15m, offset);
+              if (!zPast) { changes[tf.key] = null; return; }
+              let qPast;
+              if (q.code === 'USDT') {
+                qPast = 1;
+              } else {
+                qPast = getCloseAtOffset(quote15mSeries, offset);
+                if (!qPast) { changes[tf.key] = null; return; }
+              }
+              const ratioPast = q.code === 'USDT' ? zPast : zPast / qPast;
+              changes[tf.key] = (ratioNow / ratioPast - 1) * 100;
+            }
+          });
+
+          rows.push({
+            quote: q,
+            ratioNow,
+            priceZec: zecNow,
+            priceQuote: quoteNow,
+            changes
+          });
+        });
+
+        renderRatios(rows, timestampMs);
+        renderTable(rows);
+
+        // ----- Relative volatility (30d, 1h data) -----
+        const zecVol = computeRealizedVolAnnual(zec1h);
+        const btcVol = computeRealizedVolAnnual(series1hMap['BTCUSDT']);
+        const ethVol = computeRealizedVolAnnual(series1hMap['ETHUSDT']);
+
+        const volStats = {
+          zec: zecVol,
+          btc: btcVol,
+          eth: ethVol,
+          ratioZecBtc: (zecVol && btcVol) ? zecVol / btcVol : null,
+          ratioZecEth: (zecVol && ethVol) ? zecVol / ethVol : null
+        };
+        renderVolMetrics(volStats);
+
+        // ----- Liquidity & volume intensity (24h tickers) -----
+        function qv(sym) {
+          const t = tickersMap[sym];
+          if (!t || t.quoteVolume == null) return null;
+          return parseFloat(t.quoteVolume);
+        }
+
+        const zecVol24  = qv(BASE_SYMBOL);
+        const btcVol24  = qv('BTCUSDT');
+        const ethVol24  = qv('ETHUSDT');
+        const solVol24  = qv('SOLUSDT');
+        const dogeVol24 = qv('DOGEUSDT');
+        const xrpVol24  = qv('XRPUSDT');
+
+        const majorsSum = [btcVol24, ethVol24, solVol24, dogeVol24, xrpVol24]
+          .filter(v => v != null && !Number.isNaN(v))
+          .reduce((a, b) => a + b, 0);
+
+        const majorsAvg = majorsSum > 0 ? majorsSum / 5 : null;
+
+        const liqStats = {
+          zecVol: zecVol24,
+          btcVol: btcVol24,
+          ethVol: ethVol24,
+          solVol: solVol24,
+          dogeVol: dogeVol24,
+          xrpVol: xrpVol24,
+          ratioVsBtc: (zecVol24 && btcVol24) ? zecVol24 / btcVol24 : null,
+          ratioVsMajorsAvg: (zecVol24 && majorsAvg) ? zecVol24 / majorsAvg : null
+        };
+
+        renderLiqMetrics(liqStats);
+
+        // ----- Status -----
+        chipStatusEl.classList.add('live');
+        chipStatusEl.textContent = 'Live from Binance';
+        globalStatusEl.textContent = 'OK';
+
+        const now = new Date(timestampMs);
+        globalUpdatedEl.textContent =
+          'Last updated (15m candle open): ' +
+          now.toLocaleString(undefined, {
+            year: 'numeric',
+            month: 'short',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit'
+          });
+
+        errorMsgEl.style.display = 'none';
+        errorMsgEl.textContent = '';
+      } catch (err) {
+        console.error(err);
+        chipStatusEl.classList.add('error');
+        chipStatusEl.textContent = 'Error';
+        globalStatusEl.textContent = 'Error loading data';
+        errorMsgEl.style.display = 'block';
+        errorMsgEl.textContent =
+          'Could not load data from Binance. Check network / CORS and refresh.';
+      }
+    }
+
+    loadData();
+  </script>
+</body>
+</html>
