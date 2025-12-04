@@ -1,1 +1,164 @@
-<!-- trigger github pages -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Meliksah Eminoglu • Crypto Experiments</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg: #050816;
+      --card: #0b1020;
+      --accent: #00e0b8;
+      --text: #f9fafb;
+      --text-soft: #9ca3af;
+      --border-subtle: #1f2937;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", Roboto, sans-serif;
+      min-height: 100vh;
+      background: radial-gradient(circle at top, #111827 0, #050816 45%, #02010a 100%);
+      color: var(--text);
+      display: flex;
+      justify-content: center;
+      padding: 32px 16px;
+    }
+
+    .page {
+      width: 100%;
+      max-width: 760px;
+    }
+
+    header {
+      margin-bottom: 32px;
+    }
+
+    h1 {
+      font-size: clamp(1.8rem, 3vw, 2.4rem);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      font-size: 0.98rem;
+      color: var(--text-soft);
+      max-width: 520px;
+      line-height: 1.5;
+    }
+
+    .card {
+      background: rgba(11, 15, 30, 0.96);
+      border-radius: 18px;
+      padding: 18px 20px;
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      margin-bottom: 18px;
+    }
+
+    h2 {
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      margin-bottom: 6px;
+      color: var(--text-soft);
+    }
+
+    p {
+      font-size: 0.95rem;
+      color: var(--text-soft);
+      line-height: 1.6;
+    }
+
+    .links-list {
+      list-style: none;
+      margin-top: 10px;
+    }
+
+    .links-list li + li {
+      margin-top: 6px;
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.15s ease-out, color 0.15s ease-out;
+    }
+
+    a:hover {
+      border-color: var(--accent);
+    }
+
+    .label {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--text-soft);
+      margin-bottom: 4px;
+      display: block;
+    }
+
+    footer {
+      margin-top: 16px;
+      font-size: 0.8rem;
+      color: var(--text-soft);
+      opacity: 0.8;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <h1>Meliksah Eminoglu</h1>
+      <p class="subtitle">
+        I am building experimental and informative pages with AI, for cryptocurrencies.
+        This is a small hub to access those experiments.
+      </p>
+    </header>
+
+    <section class="card">
+      <h2>Crypto ratio dashboards</h2>
+      <p>These pages show how one coin prices against the rest of the market, with multi-timeframe context.</p>
+      <ul class="links-list">
+        <li>
+          <a href="strk-ratios.html">STRK Ratios &amp; Market Context</a>
+        </li>
+        <li>
+          <a href="zec-ratios.html">ZEC Ratios &amp; Market Context</a>
+        </li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>Connect</h2>
+      <div style="margin-bottom: 10px;">
+        <span class="label">Twitter (X)</span>
+        <p>
+          <a href="https://x.com/MeliksahCG" target="_blank" rel="noopener noreferrer">
+            @MeliksahCG
+          </a>
+        </p>
+      </div>
+      <div>
+        <span class="label">LinkedIn</span>
+        <p>
+          <a href="https://www.linkedin.com/in/meliksah-e/" target="_blank" rel="noopener noreferrer">
+            linkedin.com/in/meliksah-e
+          </a>
+        </p>
+      </div>
+    </section>
+
+    <footer>
+      Built with AI-assisted code experiments. No financial advice.
+    </footer>
+  </div>
+</body>
+</html>
