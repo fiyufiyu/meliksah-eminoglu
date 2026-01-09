@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Symbiont AI Psikoloji Testleri</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="nav-logo">
+                <span class="logo-icon">◈</span>
+                <span class="logo-text">Symbiont AI</span>
+            </a>
+            <div class="nav-auth" id="nav-auth">
+                <!-- Dynamic auth buttons -->
+            </div>
+        </div>
+    </nav>
+
+    <!-- Tests Section -->
+    <section class="tests-section" id="tests">
+        <div class="container">
+            <div class="section-header">
+                <h1 class="main-title">Psikoloji Testleri</h1>
+                <p class="section-subtitle">Kendinizi daha iyi tanıyın. AI destekli derinlemesine analizlerle kişiliğinizi keşfedin.</p>
+            </div>
+            <div class="tests-grid" id="tests-grid">
+                <!-- Tests will be loaded dynamically -->
+                <div class="test-card-skeleton"></div>
+                <div class="test-card-skeleton"></div>
+                <div class="test-card-skeleton"></div>
+                <div class="test-card-skeleton"></div>
+                <div class="test-card-skeleton"></div>
+                <div class="test-card-skeleton"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Auth Modal -->
+    <div class="modal-overlay" id="auth-modal">
+        <div class="modal">
+            <button class="modal-close" onclick="closeAuthModal()">×</button>
+            
+            <!-- Login Form -->
+            <div class="auth-form" id="login-form">
+                <div class="modal-header">
+                    <div class="modal-icon">👋</div>
+                    <h2>Tekrar Hoşgeldiniz</h2>
+                    <p>Hesabınıza giriş yapın</p>
+                </div>
+                <form onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label for="login-email">E-posta</label>
+                        <input type="email" id="login-email" placeholder="ornek@email.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="login-password">Şifre</label>
+                        <input type="password" id="login-password" placeholder="••••••••" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-full">
+                        Giriş Yap
+                    </button>
+                </form>
+                <div class="auth-switch">
+                    Hesabınız yok mu? <button onclick="switchAuthForm('register')">Kayıt olun</button>
+                </div>
+            </div>
+
+            <!-- Register Form -->
+            <div class="auth-form hidden" id="register-form">
+                <div class="modal-header">
+                    <div class="modal-icon">✨</div>
+                    <h2>Hesap Oluşturun</h2>
+                    <p>Kişilik yolculuğunuza başlayın</p>
+                </div>
+                <form onsubmit="handleRegister(event)">
+                    <div class="form-group">
+                        <label for="register-name">Adınız</label>
+                        <input type="text" id="register-name" placeholder="Adınız">
+                    </div>
+                    <div class="form-group">
+                        <label for="register-email">E-posta</label>
+                        <input type="email" id="register-email" placeholder="ornek@email.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="register-password">Şifre</label>
+                        <input type="password" id="register-password" placeholder="En az 6 karakter" required minlength="6">
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-full">
+                        Kayıt Ol
+                    </button>
+                </form>
+                <div class="auth-switch">
+                    Zaten hesabınız var mı? <button onclick="switchAuthForm('login')">Giriş yapın</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay hidden" id="loading">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

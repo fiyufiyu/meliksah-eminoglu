@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Paneli - Symbiont AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="admin-style.css">
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <span class="logo-icon">🧠</span>
+                <span class="logo-text">Symbiont AI</span>
+            </div>
+            <span class="admin-badge">Admin</span>
+        </div>
+        
+        <nav class="sidebar-nav">
+            <button class="nav-item active" data-tab="dashboard">
+                <span class="nav-icon">📊</span>
+                <span class="nav-text">Dashboard</span>
+            </button>
+            <button class="nav-item" data-tab="results">
+                <span class="nav-icon">📋</span>
+                <span class="nav-text">Test Sonuçları</span>
+            </button>
+            <button class="nav-item" data-tab="tests">
+                <span class="nav-icon">📝</span>
+                <span class="nav-text">Testler</span>
+            </button>
+            <button class="nav-item" data-tab="users">
+                <span class="nav-icon">👥</span>
+                <span class="nav-text">Kullanıcılar</span>
+            </button>
+        </nav>
+        
+        <div class="sidebar-footer">
+            <a href="/" class="back-link">
+                <span>← Ana Sayfa</span>
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Header -->
+        <header class="main-header">
+            <div class="header-left">
+                <button class="mobile-menu-btn" onclick="toggleSidebar()">☰</button>
+                <h1 id="page-title">Dashboard</h1>
+            </div>
+            <div class="header-right">
+                <div class="admin-info">
+                    <span class="admin-email" id="admin-email">admin@symbiont.ai</span>
+                    <button class="btn-logout" onclick="logout()">Çıkış</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Dashboard Tab -->
+        <section id="tab-dashboard" class="tab-content active">
+            <div class="stats-grid">
+                <div class="stat-card primary">
+                    <div class="stat-icon">📊</div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="stat-total-results">0</span>
+                        <span class="stat-label">Toplam Sonuç</span>
+                    </div>
+                </div>
+                <div class="stat-card success">
+                    <div class="stat-icon">✅</div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="stat-completed">0</span>
+                        <span class="stat-label">Tamamlanan</span>
+                    </div>
+                </div>
+                <div class="stat-card warning">
+                    <div class="stat-icon">👥</div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="stat-users">0</span>
+                        <span class="stat-label">Kullanıcı</span>
+                    </div>
+                </div>
+                <div class="stat-card accent">
+                    <div class="stat-icon">📝</div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="stat-tests">0</span>
+                        <span class="stat-label">Test Sayısı</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dashboard-grid">
+                <div class="card recent-results">
+                    <div class="card-header">
+                        <h3>Son Test Sonuçları</h3>
+                        <button class="btn-link" onclick="switchToTab('results')">Tümünü Gör →</button>
+                    </div>
+                    <div class="card-body" id="recent-results-list">
+                        <div class="loading-placeholder">Yükleniyor...</div>
+                    </div>
+                </div>
+
+                <div class="card test-distribution">
+                    <div class="card-header">
+                        <h3>Test Dağılımı</h3>
+                    </div>
+                    <div class="card-body" id="test-distribution">
+                        <div class="loading-placeholder">Yükleniyor...</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Results Tab -->
+        <section id="tab-results" class="tab-content">
+            <div class="section-toolbar">
+                <div class="search-box">
+                    <input type="text" id="search-email" placeholder="E-posta ile ara...">
+                    <button class="btn btn-primary" onclick="searchResults()">🔍 Ara</button>
+                    <button class="btn btn-secondary" onclick="loadAllResults()">Tümünü Göster</button>
+                </div>
+                <div class="filter-box">
+                    <select id="filter-test" onchange="filterByTest()">
+                        <option value="">Tüm Testler</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="results-table-container">
+                <table class="data-table" id="results-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>E-posta</th>
+                            <th>Kullanıcı</th>
+                            <th>Test</th>
+                            <th>Sonuç</th>
+                            <th>Tarih</th>
+                            <th>İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tbody id="results-tbody">
+                        <tr><td colspan="7" class="empty-state">Yükleniyor...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Tests Tab -->
+        <section id="tab-tests" class="tab-content">
+            <div class="tests-grid" id="tests-grid">
+                <div class="loading-placeholder">Testler yükleniyor...</div>
+            </div>
+        </section>
+
+        <!-- Users Tab -->
+        <section id="tab-users" class="tab-content">
+            <div class="users-table-container">
+                <table class="data-table" id="users-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>E-posta</th>
+                            <th>İsim</th>
+                            <th>Kayıt Tarihi</th>
+                            <th>Tamamlanan Test</th>
+                            <th>İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tbody id="users-tbody">
+                        <tr><td colspan="6" class="empty-state">Yükleniyor...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modal-title">Detaylar</h2>
+                <button class="modal-close" onclick="closeModal()">×</button>
+            </div>
+            <div class="modal-body" id="modal-body">
+                <!-- Dynamic content -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="loading-overlay hidden">
+        <div class="spinner"></div>
+        <p>Yükleniyor...</p>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <script src="admin-script.js"></script>
+</body>
+</html>

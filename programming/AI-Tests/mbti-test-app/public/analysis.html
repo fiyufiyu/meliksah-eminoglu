@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Analiz Sonucu - MBTI Test</title>
+    <link rel="stylesheet" href="analysis-style.css">
+</head>
+<body>
+    <div class="analysis-container">
+        <header class="analysis-header">
+            <button class="back-btn" onclick="window.history.back()">
+                ← Admin Paneline Dön
+            </button>
+            <h1>🤖 AI Kişilik Analizi</h1>
+        </header>
+
+        <div class="analysis-content">
+            <!-- Loading State -->
+            <div id="loading-state" class="loading-state">
+                <div class="ai-loading">
+                    <div class="ai-spinner"></div>
+                    <p>AI analiz yapıyor...</p>
+                    <small>Bu işlem 10-30 saniye sürebilir</small>
+                </div>
+            </div>
+
+            <!-- Error State -->
+            <div id="error-state" class="error-state hidden">
+                <div class="error-icon">⚠️</div>
+                <h2>Bir Hata Oluştu</h2>
+                <p id="error-message"></p>
+                <button class="btn btn-primary" onclick="window.history.back()">
+                    Geri Dön
+                </button>
+            </div>
+
+            <!-- Success State -->
+            <div id="success-state" class="success-state hidden">
+                <!-- User Info Card -->
+                <div class="info-card">
+                    <div class="info-header">
+                        <h2>📋 Katılımcı Bilgileri</h2>
+                    </div>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <span class="info-label">İsim</span>
+                            <span class="info-value" id="user-name">-</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Email</span>
+                            <span class="info-value" id="user-email">-</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">MBTI Tipi</span>
+                            <span class="info-value">
+                                <span class="mbti-badge" id="user-mbti">-</span>
+                            </span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Analiz Tarihi</span>
+                            <span class="info-value" id="analysis-date">-</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Scores Card -->
+                <div class="scores-card">
+                    <h3>📊 MBTI Skorları</h3>
+                    <div class="scores-grid" id="scores-grid">
+                        <!-- JavaScript ile doldurulacak -->
+                    </div>
+                </div>
+
+                <!-- AI Analysis Card -->
+                <div class="analysis-card">
+                    <div class="analysis-header-card">
+                        <h2>🤖 AI Analiz Raporu</h2>
+                        <button class="btn-copy" onclick="copyAnalysis()">
+                            📋 Kopyala
+                        </button>
+                    </div>
+                    <div class="analysis-body" id="analysis-text">
+                        <!-- AI analizi buraya gelecek -->
+                    </div>
+                </div>
+
+                <!-- Actions -->
+                <div class="actions-card">
+                    <button class="btn btn-secondary" onclick="printAnalysis()">
+                        🖨️ Yazdır
+                    </button>
+                    <button class="btn btn-primary" onclick="downloadAnalysis()">
+                        💾 PDF İndir
+                    </button>
+                    <button class="btn btn-primary" onclick="emailAnalysis()">
+                        📧 Email Gönder
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="analysis-script.js"></script>
+</body>
+</html>
+

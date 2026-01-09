@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Sonuçları - Symbiont AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="result-style.css">
+</head>
+<body class="result-page">
+    <!-- Gradient Background -->
+    <div class="gradient-bg"></div>
+    
+    <!-- Navigation -->
+    <nav class="navbar navbar-glass">
+        <div class="nav-container">
+            <a href="/" class="nav-logo">
+                <span class="logo-icon">🧠</span>
+                <span class="logo-text">Symbiont AI</span>
+            </a>
+            <div class="nav-actions">
+                <a href="/" class="btn btn-ghost btn-sm">
+                    ← Ana Sayfa
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Result Container -->
+    <div class="result-container">
+        <!-- Celebration Confetti -->
+        <div class="celebration-overlay" id="celebration">
+            <div class="confetti"></div>
+            <div class="confetti"></div>
+            <div class="confetti"></div>
+            <div class="confetti"></div>
+            <div class="confetti"></div>
+        </div>
+
+        <!-- Result Hero -->
+        <div class="result-hero">
+            <div class="result-badge" id="result-badge">
+                <span class="badge-icon">✨</span>
+                <span>Test Tamamlandı</span>
+            </div>
+            
+            <div class="result-display">
+                <div class="result-icon-container">
+                    <span class="result-icon" id="result-icon">🎯</span>
+                    <div class="icon-glow"></div>
+                </div>
+                
+                <h1 class="result-type" id="result-type">...</h1>
+                <p class="result-subtitle" id="result-subtitle">Yükleniyor...</p>
+            </div>
+
+            <div class="result-meta">
+                <div class="meta-item">
+                    <span class="meta-icon">📊</span>
+                    <span class="meta-text" id="meta-test">Test Adı</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-icon">✓</span>
+                    <span class="meta-text">Başarıyla Tamamlandı</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scores Card -->
+        <div class="result-card scores-card" id="scores-card">
+            <div class="card-header">
+                <h2 class="card-title">
+                    <span class="title-icon">📊</span>
+                    Detaylı Sonuçlarınız
+                </h2>
+            </div>
+            <div class="card-body">
+                <div class="scores-grid" id="scores-grid">
+                    <!-- Scores will be loaded dynamically -->
+                </div>
+            </div>
+        </div>
+
+        <!-- AI Analysis Card -->
+        <div class="result-card analysis-card">
+            <div class="card-header">
+                <h2 class="card-title">
+                    <span class="title-icon">🤖</span>
+                    AI Kişilik Analizi
+                </h2>
+                <button class="btn btn-sm btn-ghost" id="regenerate-btn" onclick="regenerateAnalysis()" style="display: none;">
+                    <span>↻</span> Yenile
+                </button>
+            </div>
+            
+            <div class="card-body">
+                <!-- Loading State -->
+                <div class="analysis-loading" id="analysis-loading">
+                    <div class="loading-animation">
+                        <div class="loading-dots">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                    </div>
+                    <h3>AI analiziniz hazırlanıyor...</h3>
+                    <p>Bu işlem 15-30 saniye sürebilir</p>
+                </div>
+                
+                <!-- Analysis Content -->
+                <div class="analysis-content hidden" id="analysis-content">
+                    <div class="analysis-text" id="analysis-text">
+                        <!-- AI analysis will be loaded here -->
+                    </div>
+                </div>
+                
+                <!-- Error State -->
+                <div class="analysis-error hidden" id="analysis-error">
+                    <div class="error-icon">⚠️</div>
+                    <h3>Analiz Oluşturulamadı</h3>
+                    <p id="error-message">Bir hata oluştu</p>
+                    <button class="btn btn-primary" onclick="generateAnalysis()">
+                        Tekrar Dene
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="result-actions">
+            <button class="btn btn-outline" onclick="copyAnalysis()">
+                <span>📋</span>
+                Analizi Kopyala
+            </button>
+            <button class="btn btn-outline" onclick="shareResult()">
+                <span>📤</span>
+                Paylaş
+            </button>
+            <a href="/" class="btn btn-primary btn-glow">
+                <span>Diğer Testlere Göz At</span>
+                <span>→</span>
+            </a>
+        </div>
+
+        <!-- Footer Note -->
+        <div class="result-footer">
+            <p>💡 Bu analiz yapay zeka tarafından oluşturulmuştur ve kişisel gelişim amaçlıdır.</p>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay hidden" id="loading">
+        <div class="loading-spinner"></div>
+        <p>Yükleniyor...</p>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <script src="result-script.js"></script>
+</body>
+</html>

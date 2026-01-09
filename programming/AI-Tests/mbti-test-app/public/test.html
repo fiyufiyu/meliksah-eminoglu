@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test - Symbiont AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="test-style.css">
+</head>
+<body class="test-page">
+    <!-- Back Button -->
+    <a href="/" class="back-button">
+        <span>←</span>
+        <span>Ana Sayfa</span>
+    </a>
+
+    <!-- Test Container -->
+    <div class="test-container">
+        <!-- Test Header -->
+        <div class="test-header">
+            <div class="test-info">
+                <span class="test-icon" id="test-icon">🧠</span>
+                <h1 class="test-title" id="test-title">Test Yükleniyor...</h1>
+            </div>
+            <div class="progress-section">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill"></div>
+                </div>
+                <div class="progress-text">
+                    Soru <span id="current-q">1</span> / <span id="total-q">0</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section Indicator -->
+        <div class="section-indicator" id="section-indicator">
+            Bölüm yükleniyor...
+        </div>
+
+        <!-- Question Card -->
+        <div class="question-card">
+            <div class="question-number">
+                Soru <span id="q-number">1</span>
+            </div>
+
+            <!-- BINARY QUESTION LAYOUT (MBTI, Big-Five etc.) -->
+            <div class="question-layout binary-layout" id="binary-layout">
+                <div class="question-content-vertical">
+                    <div class="statement-box statement-top" id="statement-top">
+                        <span class="statement-label">Seçenek 1</span>
+                        <p class="statement-text" id="top-text">Yükleniyor...</p>
+                    </div>
+                    
+                    <div class="divider-text">veya</div>
+                    
+                    <div class="statement-box statement-bottom" id="statement-bottom">
+                        <span class="statement-label">Seçenek 2</span>
+                        <p class="statement-text" id="bottom-text">Yükleniyor...</p>
+                    </div>
+                </div>
+
+                <div class="answer-prompt">
+                    Hangisi size daha uygun?
+                </div>
+
+                <div class="answer-list" id="binary-answers">
+                    <button class="answer-option" data-answer="A" onclick="selectAnswer('A')">
+                        <div class="option-radio"></div>
+                        <div class="option-content">
+                            <span class="option-label">Kesinlikle üstteki</span>
+                            <span class="option-desc">Seçenek 1 tam bana uygun</span>
+                        </div>
+                    </button>
+                    <button class="answer-option" data-answer="B" onclick="selectAnswer('B')">
+                        <div class="option-radio"></div>
+                        <div class="option-content">
+                            <span class="option-label">Biraz üstteki</span>
+                            <span class="option-desc">Seçenek 1'e daha yakınım</span>
+                        </div>
+                    </button>
+                    <button class="answer-option" data-answer="C" onclick="selectAnswer('C')">
+                        <div class="option-radio"></div>
+                        <div class="option-content">
+                            <span class="option-label">Biraz alttaki</span>
+                            <span class="option-desc">Seçenek 2'ye daha yakınım</span>
+                        </div>
+                    </button>
+                    <button class="answer-option" data-answer="D" onclick="selectAnswer('D')">
+                        <div class="option-radio"></div>
+                        <div class="option-content">
+                            <span class="option-label">Kesinlikle alttaki</span>
+                            <span class="option-desc">Seçenek 2 tam bana uygun</span>
+                        </div>
+                    </button>
+                </div>
+            </div>
+
+            <!-- MULTIPLE CHOICE LAYOUT (AI Therapist etc.) -->
+            <div class="question-layout multiple-layout hidden" id="multiple-layout">
+                <div class="question-text-container">
+                    <p class="question-main-text" id="question-main-text">Soru yükleniyor...</p>
+                </div>
+
+                <div class="answer-list multiple-choice-list" id="multiple-answers">
+                    <button class="answer-option mc-option" data-answer="A" onclick="selectAnswer('A')">
+                        <div class="option-letter">A</div>
+                        <div class="option-content">
+                            <span class="option-text" id="option-a-text">Seçenek A</span>
+                        </div>
+                    </button>
+                    <button class="answer-option mc-option" data-answer="B" onclick="selectAnswer('B')">
+                        <div class="option-letter">B</div>
+                        <div class="option-content">
+                            <span class="option-text" id="option-b-text">Seçenek B</span>
+                        </div>
+                    </button>
+                    <button class="answer-option mc-option" data-answer="C" onclick="selectAnswer('C')">
+                        <div class="option-letter">C</div>
+                        <div class="option-content">
+                            <span class="option-text" id="option-c-text">Seçenek C</span>
+                        </div>
+                    </button>
+                    <button class="answer-option mc-option" data-answer="D" onclick="selectAnswer('D')">
+                        <div class="option-letter">D</div>
+                        <div class="option-content">
+                            <span class="option-text" id="option-d-text">Seçenek D</span>
+                        </div>
+                    </button>
+                    <button class="answer-option mc-option" data-answer="E" onclick="selectAnswer('E')">
+                        <div class="option-letter">E</div>
+                        <div class="option-content">
+                            <span class="option-text" id="option-e-text">Seçenek E</span>
+                        </div>
+                    </button>
+                </div>
+            </div>
+
+            <div class="navigation-buttons">
+                <button class="btn btn-ghost" id="prev-btn" onclick="previousQuestion()" disabled>
+                    ← Önceki
+                </button>
+                <button class="btn btn-primary" id="next-btn" onclick="nextQuestion()" disabled>
+                    Sonraki →
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay hidden" id="loading">
+        <div class="loading-spinner"></div>
+        <p id="loading-text">Yükleniyor...</p>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <script src="test-script.js"></script>
+</body>
+</html>
